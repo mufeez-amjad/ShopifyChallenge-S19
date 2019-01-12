@@ -1,8 +1,8 @@
-import express from 'express';
-import graphqlHTTP from 'express-graphql';
+const { ApolloServer } = require('apollo-server');
+
 import mongoose from 'mongoose';
 import schema from './schema';
-const app = express();
+
 const PORT = 3000;
 
 // configure mongodb connection
@@ -15,17 +15,11 @@ db.once('open', function(err, resp){
     console.log("Connected to MongoDB");
 });
 
-//set default route
-app.get('/', (req, res) => {
-    return res.json({
-        msg: 'Shopify Backend Challenge'
-    })
-})
-
-app.use('/graphql', graphqlHTTP({
-    graphiql: true,
-    schema
-}));
+const app = new ApolloServer({
+    schema,
+    introspection: true,
+    playground: true,
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running at localhost:${PORT}`);

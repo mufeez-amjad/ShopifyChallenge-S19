@@ -1,5 +1,5 @@
 import Product from './models/product';
-import { isNonNullType } from 'graphql';
+import Cart from './models/cart';
 
 export const resolvers = {
     Query: {
@@ -17,6 +17,9 @@ export const resolvers = {
             return await Product.find({
                 "title" : title.toString()
             });
+        },
+        async getCart() {
+            return await Cart.find();
         }
     },
     Mutation: {
