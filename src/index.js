@@ -7,7 +7,7 @@ const PORT = 3000;
 
 // configure mongodb connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/shopify-challenge', { useNewUrlParser: true });
+mongoose.connect('mongodb://user:password123@ds111188.mlab.com:11188/shopify', { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

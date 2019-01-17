@@ -5,7 +5,7 @@ const CartSchema = new Schema({
       items: [
         {
             product: {
-                type: Schema.Types.ObjectId,
+                type: String,
                 ref: "product",
                 required: true
             },
@@ -23,5 +23,10 @@ const CartSchema = new Schema({
         type: Number,
         required: true
     },
+    user: {
+        type: String,
+        ref: "user",
+        required: true
+    }
 })
 export default mongoose.model('cart', CartSchema);

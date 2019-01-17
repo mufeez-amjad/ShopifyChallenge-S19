@@ -17,6 +17,11 @@ type Cart {
     id : ID!
     items: [CartItem!]
     total: Float!
+    user: String!
+}
+type User {
+    id: ID!
+    username: String!
 }
 type Query {
     """
@@ -32,19 +37,33 @@ type Query {
     Retrieve a cart and its contents. 
     """
     getCart: Cart
+    getUsers: [User]
 }
 input ProductInput {
     title: String!
     price: Float!
     inventory_count: Int!
 }
+input CartInput {
+    title: String!
+    quantity: Int
+}
+input UserInput {
+    username: String!
+}
 type Mutation {
     createProduct(input: ProductInput): Product
-    updateProduct(title: String!, input: ProductInput) : Product
-    deleteProduct(title: String!) : Boolean
+    updateProduct(title: String!, input: ProductInput): Product
+    deleteProduct(title: String!): Boolean
     deleteAll: Boolean
+    createUser(input: UserInput!): User
+    createCart(username: String!): Cart
+    addToCart(input: CartInput): Cart
 }
 `
+//completeCart(user: String!)
+
+
 export default makeExecutableSchema({
     typeDefs,
     resolvers
