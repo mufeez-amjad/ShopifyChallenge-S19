@@ -60,6 +60,7 @@ type Mutation {
     createUser(input: UserInput!): User
     createCart(username: String!): Cart
     addToCart(username: String!, input: CartInput): Cart
+    completeCart(username: String!): String
 }
 `
 //completeCart(user: String!)

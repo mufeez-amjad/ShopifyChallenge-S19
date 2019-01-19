@@ -2,6 +2,8 @@ import Product from './models/product';
 import Cart from './models/cart';
 import User from './models/user';
 
+import { ApolloError } from 'apollo-server'
+
 export const resolvers = {
     Query: {
         async allProducts(_, { inStock }) {
@@ -42,14 +44,21 @@ export const resolvers = {
             if (quantity == null) {
                 quantity = 1;
             }
-            return await Product.findOneAndUpdate(
-                query,
-                { 
-                    $inc: { inventory_count: -quantity }
-                },
-            );
+            let result = await Product.findOne(query);
+            
+            if (result.inventory_count <= 0) {
+                throw new ApolloError('This item is out of stock!');
+            }
+            else {
+                return await Product.update(
+                    query,
+                    { 
+                        $inc: { inventory_count: -quantity }
+                    },
+                );
+            }
         },
-        async deleteProduct(_, { title }) {
+        async deleteProduct(_, { title }) { //TODO: return true or false based on callback
             return await Product.deleteMany({
                 title: title
             });
@@ -70,11 +79,14 @@ export const resolvers = {
             var productQuery = { title: input.title.toString() }
             var { price, inventory_count } = await Product.findOne(productQuery);
             var subTotal = price*input.quantity
-            console.log(price)
             var query = { user: username }
 
             if (inventory_count <= 0) {
-                throw console.error("That item is sold out.");
+                throw new ApolloError('This item is out of stock!');
+            }
+
+            if (input.quantity > inventory_count) {
+                input.quantity = inventory_count;
             }
 
             return await Cart.findOneAndUpdate(
@@ -90,6 +102,34 @@ export const resolvers = {
                     $inc: { total: subTotal }
                 }
             );
+        },
+        async completeCart(_, { username }) {
+            var query = { user: username }
+
+            let cart =  await Cart.findOne(query);
+            if (cart == null) {
+                throw new ApolloError('Cart does not exist!');
+            }
+            let items = cart.items;
+            if (items.length  == 0) {
+                throw new ApolloError('Cannot complete an empty cart!');
+            }
+            
+
+            for (let item of items) {
+                await Product.findOneAndUpdate(
+                    { title: item.title },
+                    {
+                        $inc: { inventory_count: -item.quantity }
+                    }
+                    
+                );
+            }
+
+            let total = cart.total;
+            cart.remove();
+
+            return `Cart completed successfully, total was: $${total}`
         }
     }
 }
