@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const CartSchema = new Schema({
       items: [
         {
-            product: {
+            title: {
                 type: String,
                 ref: "product",
                 required: true
@@ -13,7 +13,7 @@ const CartSchema = new Schema({
                 type: Number,
                 required: true
             },
-            cost: {
+            subTotal: {
               type: Number,
               required: true,
             }
@@ -25,7 +25,7 @@ const CartSchema = new Schema({
     },
     user: {
         type: String,
-        ref: "user",
+        ref: 'user',
         required: true
     }
 })

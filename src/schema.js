@@ -9,9 +9,9 @@ type Product {
     inventory_count: Int!
 }
 type CartItem {
-    product: Product!
+    title: String!
     quantity: Int!
-    cost: Float!
+    subTotal: Float!
 }
 type Cart {
     id : ID!
@@ -36,7 +36,7 @@ type Query {
     """
     Retrieve a cart and its contents. 
     """
-    getCart: Cart
+    getCart(username: String!): Cart
     getUsers: [User]
 }
 input ProductInput {
@@ -55,10 +55,11 @@ type Mutation {
     createProduct(input: ProductInput): Product
     updateProduct(title: String!, input: ProductInput): Product
     deleteProduct(title: String!): Boolean
-    deleteAll: Boolean
+    purchaseProduct(title: String!, quantity: Int=1): Product
+    deleteAll: Int
     createUser(input: UserInput!): User
     createCart(username: String!): Cart
-    addToCart(input: CartInput): Cart
+    addToCart(username: String!, input: CartInput): Cart
 }
 `
 //completeCart(user: String!)
