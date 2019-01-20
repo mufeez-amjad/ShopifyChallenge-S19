@@ -3,8 +3,6 @@ const { ApolloServer } = require('apollo-server');
 const mongoose = require('mongoose');
 import schema from './schema.js';
 
-const PORT = 3000;
-
 // configure mongodb connection
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://user:password123@ds111188.mlab.com:11188/shopify', { useNewUrlParser: true });
@@ -21,6 +19,6 @@ const app = new ApolloServer({
     playground: true,
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running at localhost:${PORT}`);
-})
+app.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
+});
