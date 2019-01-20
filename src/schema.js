@@ -25,7 +25,7 @@ A cart that has a list of items, a total price, as well as an associated user.
 type Cart {
     id : ID!
     items: [CartItem!]
-    total: Float!
+    total: Float
     user: String!
 }
 """
@@ -73,7 +73,7 @@ input UpdateProductInput {
 }
 input CartInput {
     title: String!
-    quantity: Int
+    quantity: Int=1
 }
 type Mutation {
     """

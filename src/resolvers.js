@@ -32,6 +32,7 @@ export const resolvers = {
                 if (!doc) {
                     throw new ApolloError(`There is no cart for ${username}.`)
                 }
+                return doc;
             });
         },
         async getUsers() {
@@ -44,7 +45,6 @@ export const resolvers = {
         },
         async updateProduct(_, { title, input }) { 
             var query = { title: title };
-            console.log(input);
             return await Product.findOneAndUpdate(query, input, {new: true}, (error, doc) => {
                 if (error) {
                     throw new ApolloError("There was an error updating the product!");
@@ -82,7 +82,7 @@ export const resolvers = {
         async deleteAll() {
             return await Product.remove({});
         },
-        async createUser(_, { input }) {
+        async createUser(_, input) {
             return await User.create(input);
         },
         async createCart(_, { username }) {
@@ -97,11 +97,10 @@ export const resolvers = {
             });
         },
         async addToCart(_, { username, input }) {
-            var productQuery = { title: input.title.toString() }
+            var productQuery = { title: input.title }
             var { price, inventory_count } = await Product.findOne(productQuery);
             var subTotal = price*input.quantity
             var query = { user: username }
-
             if (inventory_count <= 0) {
                 throw new ApolloError("This item is out of stock!");
             }

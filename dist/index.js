@@ -9,6 +9,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _require = require('apollo-server'),
     ApolloServer = _require.ApolloServer;
 
+require('babel-polyfill');
+
 var mongoose = require('mongoose');
 
 

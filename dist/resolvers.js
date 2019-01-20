@@ -110,6 +110,7 @@ var resolvers = exports.resolvers = {
                                     if (!doc) {
                                         throw new _apolloServer.ApolloError('There is no cart for ' + username + '.');
                                     }
+                                    return doc;
                                 });
 
                             case 3:
@@ -182,9 +183,7 @@ var resolvers = exports.resolvers = {
                         switch (_context6.prev = _context6.next) {
                             case 0:
                                 query = { title: title };
-
-                                console.log(input);
-                                _context6.next = 4;
+                                _context6.next = 3;
                                 return _product2.default.findOneAndUpdate(query, input, { new: true }, function (error, doc) {
                                     if (error) {
                                         throw new _apolloServer.ApolloError("There was an error updating the product!");
@@ -196,10 +195,10 @@ var resolvers = exports.resolvers = {
                                     }
                                 });
 
-                            case 4:
+                            case 3:
                                 return _context6.abrupt('return', _context6.sent);
 
-                            case 5:
+                            case 4:
                             case 'end':
                                 return _context6.stop();
                         }
@@ -304,10 +303,9 @@ var resolvers = exports.resolvers = {
                 }, _callee9, _this9);
             }))();
         },
-        createUser: function createUser(_, _ref8) {
+        createUser: function createUser(_, input) {
             var _this10 = this;
 
-            var input = _ref8.input;
             return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
                 return regeneratorRuntime.wrap(function _callee10$(_context10) {
                     while (1) {
@@ -327,10 +325,10 @@ var resolvers = exports.resolvers = {
                 }, _callee10, _this10);
             }))();
         },
-        createCart: function createCart(_, _ref9) {
+        createCart: function createCart(_, _ref8) {
             var _this11 = this;
 
-            var username = _ref9.username;
+            var username = _ref8.username;
             return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
                 var query, user;
                 return regeneratorRuntime.wrap(function _callee11$(_context11) {
@@ -368,26 +366,26 @@ var resolvers = exports.resolvers = {
                 }, _callee11, _this11);
             }))();
         },
-        addToCart: function addToCart(_, _ref10) {
+        addToCart: function addToCart(_, _ref9) {
             var _this12 = this;
 
-            var username = _ref10.username,
-                input = _ref10.input;
+            var username = _ref9.username,
+                input = _ref9.input;
             return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
-                var productQuery, _ref11, price, inventory_count, subTotal, query;
+                var productQuery, _ref10, price, inventory_count, subTotal, query;
 
                 return regeneratorRuntime.wrap(function _callee12$(_context12) {
                     while (1) {
                         switch (_context12.prev = _context12.next) {
                             case 0:
-                                productQuery = { title: input.title.toString() };
+                                productQuery = { title: input.title };
                                 _context12.next = 3;
                                 return _product2.default.findOne(productQuery);
 
                             case 3:
-                                _ref11 = _context12.sent;
-                                price = _ref11.price;
-                                inventory_count = _ref11.inventory_count;
+                                _ref10 = _context12.sent;
+                                price = _ref10.price;
+                                inventory_count = _ref10.inventory_count;
                                 subTotal = price * input.quantity;
                                 query = { user: username };
 
@@ -430,10 +428,10 @@ var resolvers = exports.resolvers = {
                 }, _callee12, _this12);
             }))();
         },
-        completeCart: function completeCart(_, _ref12) {
+        completeCart: function completeCart(_, _ref11) {
             var _this13 = this;
 
-            var username = _ref12.username;
+            var username = _ref11.username;
             return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
                 var query, cart, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, total;
 

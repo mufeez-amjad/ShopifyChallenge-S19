@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server');
+require('babel-polyfill');
 
 const mongoose = require('mongoose');
 import schema from './schema.js';

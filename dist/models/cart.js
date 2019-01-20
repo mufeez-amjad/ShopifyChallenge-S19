@@ -30,7 +30,7 @@ var CartSchema = new Schema({
     }],
     total: {
         type: Number,
-        required: true
+        default: 0
     },
     user: {
         type: String,
