@@ -6,7 +6,7 @@ import { ApolloError } from 'apollo-server'
 
 export const resolvers = {
     Query: {
-        async allProducts(_, { inStock }) {
+        async getAllProducts(_, { inStock }) {
             if (!inStock) {
                 return await Product.find()
             } else {
@@ -17,11 +17,22 @@ export const resolvers = {
             
         },
         async getProduct(_, { title }) {
-            return await Product.findOne({ title: title.toString() });
+            var query = { title: title }
+            return await Product.findOne(query).then( (doc) => { //TODO: fix error with error
+                if (!doc) {
+                    throw new ApolloError("The product does not exist!");
+                }
+                
+                return doc;
+            });
         },
         async getCart(_, { username }) {
             var query = { user: username }
-            return await Cart.findOne(query);
+            return await Cart.findOne(query).then( (doc) => {
+                if (!doc) {
+                    throw new ApolloError(`There is no cart for ${username}.`)
+                }
+            });
         },
         async getUsers() {
             return await User.find();
@@ -31,23 +42,29 @@ export const resolvers = {
         async createProduct(_, { input }) {
             return await Product.create(input);
         },
-        async updateProduct(_, { title }, { input }) { //FIXME: 
+        async updateProduct(_, { title, input }) { 
             var query = { title: title };
-            return await Product.findOneAndUpdate({
-                query,
-                update: { input },
-                new: true
+            console.log(input);
+            return await Product.findOneAndUpdate(query, input, {new: true}, (error, doc) => {
+                if (error) {
+                    throw new ApolloError("There was an error updating the product!");
+                }
+                if (!doc) {
+                    throw new ApolloError("That product does not exist!");
+                }
+                else {
+                    return doc;
+                }
             });
         },
-        async purchaseProduct(_, { title, quantity }) { //TODO: can't purchase out of stock
+        async purchaseProduct(_, { title, quantity }) {
             var query = { title: title };
-            if (quantity == null) {
-                quantity = 1;
-            }
             let result = await Product.findOne(query);
-            
+            if (!result) {
+                throw new ApolloError("This item does not exist!")
+            }
             if (result.inventory_count <= 0) {
-                throw new ApolloError('This item is out of stock!');
+                throw new ApolloError("This item is out of stock!");
             }
             else {
                 return await Product.update(
@@ -58,21 +75,25 @@ export const resolvers = {
                 );
             }
         },
-        async deleteProduct(_, { title }) { //TODO: return true or false based on callback
-            return await Product.deleteMany({
-                title: title
-            });
+        async deleteProduct(_, { title }) {
+            var query = { title: title }
+            return await Product.deleteMany(query);
         },
-        async deleteAll() { //FIXME:
+        async deleteAll() {
             return await Product.remove({});
         },
         async createUser(_, { input }) {
             return await User.create(input);
         },
         async createCart(_, { username }) {
+            var query = { username: username }
+            let user =  await User.findOne(query);
+
+            if (!user) {
+                throw new ApolloError("No such user exists!");
+            }
             return await Cart.create({
                 user: username,
-                total: 0
             });
         },
         async addToCart(_, { username, input }) {
@@ -82,11 +103,11 @@ export const resolvers = {
             var query = { user: username }
 
             if (inventory_count <= 0) {
-                throw new ApolloError('This item is out of stock!');
+                throw new ApolloError("This item is out of stock!");
             }
 
             if (input.quantity > inventory_count) {
-                input.quantity = inventory_count;
+                throw new ApolloError(`There is only ${inventory_count} left in stock!`);
             }
 
             return await Cart.findOneAndUpdate(
@@ -107,15 +128,14 @@ export const resolvers = {
             var query = { user: username }
 
             let cart =  await Cart.findOne(query);
-            if (cart == null) {
-                throw new ApolloError('Cart does not exist!');
+            if (!cart) {
+                throw new ApolloError("Cart does not exist!");
             }
             let items = cart.items;
-            if (items.length  == 0) {
-                throw new ApolloError('Cannot complete an empty cart!');
+            if (!items.length) {
+                throw new ApolloError("Cannot complete an empty cart!");
             }
             
-
             for (let item of items) {
                 await Product.findOneAndUpdate(
                     { title: item.title },

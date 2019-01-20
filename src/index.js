@@ -1,7 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 
-import mongoose from 'mongoose';
-import schema from './schema';
+const mongoose = require('mongoose');
+import schema from './schema.js';
 
 const PORT = 3000;
 
