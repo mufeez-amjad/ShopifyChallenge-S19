@@ -159,7 +159,7 @@ mutation {
   createProduct(input: {
     title: "Airpods"
     price: 259.99
-    inventory_count: 1
+    inventory_count: 0
   }) {
     title
     price
@@ -186,7 +186,7 @@ Create a user:
 
 ```
 mutation {
-  createUser(username: "test") {
+  createUser(username: "shopify") {
     username
   }
 }
