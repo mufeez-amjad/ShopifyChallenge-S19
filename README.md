@@ -1,12 +1,11 @@
 # Shopify Summer 2019 Developer Intern Challenge
 
-I enjoyed doing the challenge because it gave me an opportunity to learn GraphQL.
+This is my submission for the Summer 2019 Shopify Challenge. I really enjoyed doing it because it gave me an opportunity to learn GraphQL and also brush up on some of my backend knowledge.
 
 ## Getting Started:
 The live server is deployed here: [server](https://shopify-s19.herokuapp.com).
 
 ### Object Schemas
-This is my submission for the Shopify Internship Challenge Summer '19.
 
 The requirement of the challenge was to build an online marketplace that allows products to be queried for, and purchased. This required a Product Schema:
 
@@ -78,7 +77,7 @@ const UserSchema = new Schema({
 ```
 # Documentation
 
-**The following queries and mutations are available in more depth by viewing the schema tab in the [GraphQL Playground](https://shopify-s19.herokuapp.com/).**
+**The following documentation regarding queries and mutations is available in more depth by viewing the schema tab in the [GraphQL Playground](https://shopify-s19.herokuapp.com/).**
 
 ## Queries
 
@@ -210,7 +209,7 @@ mutation {
 }
 ```
 
-Add one product to a shopping cart:
+Add **one** product to a shopping cart:
 
 ```
 mutation {
@@ -229,7 +228,7 @@ mutation {
 }
 ```
 
-Add more than one product to a shopping cart:
+Add **more than one** product to a shopping cart:
 
 ```
 mutation {
