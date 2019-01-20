@@ -255,3 +255,25 @@ mutation {
   completeCart(username: "shopify")
 }
 ```
+
+Delete all products:
+
+```
+mutation {
+  deleteAll {
+    ok
+    n
+  }
+}
+```
+
+Delete a single product:
+
+```
+mutation {
+  deleteProduct(title: "MacBook Pro") {
+    ok
+    n
+  }
+}
+```
