@@ -5,6 +5,12 @@ This is my submission for the Summer 2019 Shopify Challenge. I really enjoyed do
 ## Getting Started:
 The live server is deployed here: [server](https://shopify-s19.herokuapp.com).
 
+Alternatively, to run the server locally:
+1. clone the repo
+2. run `npm install`
+3. run `npm run build && npm start`
+4. navigate to `http://localhost:4000` to interact with GraphQL Playground
+
 ### Object Schemas
 
 The requirement of the challenge was to build an online marketplace that allows products to be queried for, and purchased. This required a Product Schema:
