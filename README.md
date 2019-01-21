@@ -27,7 +27,7 @@ const ProductSchema = new Schema({
 })
 ```
 
-For the optional part of the challenge we also needed to interact with carts and users who own those carts.
+For the optional part of the challenge we also needed to interact with carts and users who own those carts. This required a Cart and User Schema:
 
 #### Cart
 
@@ -85,30 +85,28 @@ For the purpose of the demo I chose to query by `title` and `username` instead o
 
 The API supports the following queries:
 
-- All products
-- All products in stock
-- A specific product
-- A user's shopping cart
-- All users
-
+| Query         | Parameters                                                                                   | Operation         |
+|---------------|----------------------------------------------------------------------------------------------|-------------------|
+| getAllProducts | **Optional** `inStock`: Boolean  | Returns either all products or only the ones in stock  |
+| getProduct | `title`: String  | Returns a specific product |
+| getCart | `username`: String | Returns the cart of a specified user |
 ## Mutations
 
 For the purpose of the demo I chose to mutate by `title` and `username` instead of id.
 
-The API supports the following mutation:
+The API supports the following mutations:
 
-- Creating a product
-- Updating a product
-  - can edit its `title`, `price` or `inventory_count`
-- Deleting a product
-- Deleting all products
-- Purchasing a product
-  - This was for the required portion of the challenge. It only decreases a product's `inventory_count`
-- Creating a user
-- Creating a cart for a given user
-- Adding a product to a user's cart
-- Completing a cart 
-
+| Mutation      | Parameters                                                                                   | Operation         |
+|---------------|----------------------------------------------------------------------------------------------|-------------------|
+| createProduct | `input` : {<br > `title` : String,<br > `price` : Float,<br > `inventory_count` : Int<br > } | Creates a product |
+| updateProduct | `title`: String <br><br> `input`: {<br> `title`: String,<br> `price`: Float,<br> `inventory_count`: Int<br> }  | Updates an existing product |
+| deleteProduct | `title`: String | Deletes the specified product |
+| deleteAll | none | Deletes all products |
+| purchaseProduct | `title`: String <br> **Optional** `quantity`: Int | Decreases `inventory_count` by `quantity` or 1 if not specified |
+| createUser | `username`: String | Creates a user |
+| createCart | `username`: String | Creates a cart for a specified user |
+| addToCart | `username`: String <br> <br>  `input`: {<br> `title`: String,<br>`quantity`: Int <br> } | Adds specified product(s) to cart |
+| completeCart | `username`: String | Completes a cart |
 
 ## Examples
 
